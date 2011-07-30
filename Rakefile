@@ -4,6 +4,8 @@ require File.join File.dirname(__FILE__), 'lib/adobe/air'
 
 desc "Runs the application in development mode"
 task :default => ['run:development']
+
+desc "Runs the test suite for ScoutApp"
 task :test => 'run:test'
 
 namespace :dev do
