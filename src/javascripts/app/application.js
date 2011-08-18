@@ -141,7 +141,7 @@ var app = {
     });
     Projects.nuke();
     $('.projects').trigger(':changed');
-    $('.projects').trigger('processes:killAll');
+    $('.projects').trigger('processes:stopAll');
     $('.project_details').hide();
     $('.non_selected').show();
   },
