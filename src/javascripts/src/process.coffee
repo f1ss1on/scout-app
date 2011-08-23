@@ -55,13 +55,13 @@ class ProjectWatcher
     args
 
   stop_native_process: () ->
-    @process.exit();
+    @process.exit()
     $('.project[data-key=' + @data.project.key + ']').trigger ':stopped'
 
   error_data_handler: () ->
     (event) =>
       bytes = @process.standardError.readUTFBytes @process.standardError.bytesAvailable
-      $('.project_details[data-key=' + @data.project.key + ']').trigger ':newLogOutput', bytes.toString();
+      $('.project_details[data-key=' + @data.project.key + ']').trigger ':newLogOutput', bytes.toString()
 
   output_data_handler: () ->
     (event) =>
@@ -70,7 +70,7 @@ class ProjectWatcher
 
   on_exit: () ->
     (event) =>
-      $('.project[data-key=' + @data.project.key + ']').trigger 'watch:stop';
+      $('.project[data-key=' + @data.project.key + ']').trigger 'watch:stop'
 
 
 startWatchingProject = (event, data) ->
