@@ -1,17 +1,5 @@
 Processes = {}
 
-class JavaRuntime
-  absolute_path: () -> 
-    if(air.Capabilities.os.match(/Windows/))
-      air.File.applicationDirectory.resolvePath("C:\\Program Files\\Java\\jre6\\bin\\java.exe")
-    else
-      air.File.applicationDirectory.resolvePath("/usr/bin/java")
-
-class CompassRuntime
-  absolute_path: () ->
-    air.File.applicationDirectory.resolvePath('bin/compass').nativePath
-
-
 class ProjectWatcher
   constructor: (@data, @java_runtime = new JavaRuntime(), @compass_runtime = new CompassRuntime()) ->
 

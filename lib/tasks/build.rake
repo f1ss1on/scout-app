@@ -57,9 +57,12 @@ end
 
 namespace :compile do
   task :coffee => 'environment' do
-    src = File.join Scout.root, "src/javascripts/src/*.coffee"
-    dest = File.join Scout.root, "build/javascripts/app/"
-    system "coffee -o #{dest} -c #{src}"
+    src = File.join Scout.root, "src/javascripts/src/"
+    src_files = Dir["#{src}/**/**.coffee"].join " "
+    puts src_files.inspect
+    dest = File.join Scout.root, "build/javascripts/app/process.js"
+    puts "coffee -j #{dest} -c #{src_files}"
+    system "coffee -j #{dest} -c #{src_files}"
     fail unless $?.exitstatus == 0
   end
 end
