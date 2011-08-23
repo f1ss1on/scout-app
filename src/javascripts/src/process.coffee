@@ -59,23 +59,18 @@ class ProjectWatcher
     $('.project[data-key=' + @data.project.key + ']').trigger ':stopped'
 
   error_data_handler: () ->
-    process = @process
-    data = @data
-    (event) ->
-      bytes = process.standardError.readUTFBytes process.standardError.bytesAvailable
-      $('.project_details[data-key=' + data.project.key + ']').trigger ':newLogOutput', bytes.toString();
+    (event) =>
+      bytes = @process.standardError.readUTFBytes @process.standardError.bytesAvailable
+      $('.project_details[data-key=' + @data.project.key + ']').trigger ':newLogOutput', bytes.toString();
 
   output_data_handler: () ->
-    process = @process
-    data = @data
-    (event) ->
-      bytes = process.standardOutput.readUTFBytes process.standardOutput.bytesAvailable
-      $('.project_details[data-key=' + data.project.key + ']').trigger ':newLogOutput', bytes.toString()
+    (event) =>
+      bytes = @process.standardOutput.readUTFBytes @process.standardOutput.bytesAvailable
+      $('.project_details[data-key=' + @data.project.key + ']').trigger ':newLogOutput', bytes.toString()
 
   on_exit: () ->
-    data = @data
-    (event) ->
-      $('.project[data-key=' + data.project.key + ']').trigger 'watch:stop';
+    (event) =>
+      $('.project[data-key=' + @data.project.key + ']').trigger 'watch:stop';
 
 
 startWatchingProject = (event, data) ->
