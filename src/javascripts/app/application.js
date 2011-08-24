@@ -9,12 +9,6 @@ var app = {
     };
   },
 
-  initialize: function() {
-    var view = new ScoutView();
-    var presenter = new ScoutPresenter(view);
-    presenter.appInitialized();
-  },
-  
   createProjectBySelectingDirectory: function() {
     browseDirectories(air.File.userDirectory.nativePath, function(evnt) {
       if(air.Capabilities.os.match(/Windows/)) {
@@ -290,7 +284,7 @@ $(document).ready(function() {
     setProjectState(this, "started");
   }
 
-  app.initialize();
+  new ScoutApp().initialize();
 });
 
 
