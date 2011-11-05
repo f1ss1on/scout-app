@@ -11,6 +11,10 @@ class ProjectListView
   resize: () ->
     this._resizeList()
     this._resizeItems()
+    
+  select: (project) ->
+    @list.find('.project').removeClass('selected')
+    @list.find(ScoutUtils.projectSelector(project)).addClass 'selected'
 
   _resizeList: () ->
     height = this._listHeight()
