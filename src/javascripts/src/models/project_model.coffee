@@ -1,6 +1,6 @@
 class ProjectModel
   constructor: (@attrs) ->
-    
+
   save: () ->
     defaults =
       name:"",
@@ -16,7 +16,7 @@ class ProjectModel
 
     saveable_attrs =
       name: options.name,
-      projectDir: options.dir,
+      projectDir: options.projectDir,
       sassDir: options.sassDir,
       cssDir: options.cssDir,
       javascriptsDir: options.javascriptsDir,
