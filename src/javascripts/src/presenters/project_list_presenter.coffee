@@ -5,5 +5,5 @@ class ProjectListPresenter
     @view.listProjects()
 
   selectAndConfigure: (project) ->
-    air.trace("selecting and configuring project")
+    air.trace("stub: selecting and configuring project")
   
