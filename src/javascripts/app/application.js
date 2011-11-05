@@ -218,14 +218,15 @@ $(document).ready(function() {
 
 
 function deleteProject() {
-  key = $(this).parents('.project_details:first').attr('data-key');
+  var project_details = $(this).parents('.project_details:first');
+  key = project_details.attr('data-key');
   Projects.get(key, function(project) {
     Projects.remove(project);
   });
   $('.project[data-key='+key+']:first').trigger('watch:stop');
   $('.projects').trigger(':changed');
 
-  $('.project_details').hide();
+  project_details.remove();
   $('.non_selected').show();
 
   return false;

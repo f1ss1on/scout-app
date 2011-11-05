@@ -2,6 +2,8 @@ class ProjectListView
   constructor: () ->
     this._makeResizable()
     @list = $(".project_list")
+    $('.projects').live ":changed", (event) =>
+      this.listProjects()
   
   listProjects: () -> 
     $('.projects').empty()

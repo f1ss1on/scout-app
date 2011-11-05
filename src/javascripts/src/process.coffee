@@ -66,7 +66,8 @@ startWatchingProject = (event, data) ->
   watcher.watch()
 
 stopWatchingProject = (event, data) ->
-  Processes[$(this)].stop()
+  watcher = Processes[$(this)]
+  watcher.stop() if watcher
 
 stopAllWatchers = (event, data) ->
   watcher.stop() for project, watcher of Processes
