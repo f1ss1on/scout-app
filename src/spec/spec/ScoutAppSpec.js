@@ -13,11 +13,11 @@ function wait(millis) {
 describe("Compass App", function(){
   beforeEach(function() {
     // stubs
-    app.createProjectBySelectingDirectory = function(callback){
-      app.createProject({
+    ScoutUtils.createProjectBySelectingDirectory = function(callback){
+      new ProjectModel({
         name: "project-a",
         projectDir: "/some/path/project-a"
-      });
+      }).save();
     };
     app.nukeAllProjects();
   });
@@ -52,15 +52,15 @@ describe("Compass App", function(){
   describe("adding multiple projects", function(){
     beforeEach(function(){
       Projects.save({name: 'project-a'});
-      app.listProjects();
+      $(".projects").trigger(":changed");
     });
 
     it("lists both projects", function(){
-      app.createProjectBySelectingDirectory = function(callback){
-        app.createProject({
+      ScoutUtils.createProjectBySelectingDirectory = function(callback){
+        new ProjectModel({
           name: "project-b",
           projectDir: "/some/path/project-b"
-        });
+        }).save();
       };
       $(".option.add").click();
       expect($(".project:visible").length).toBe(2);
@@ -69,15 +69,15 @@ describe("Compass App", function(){
 
   describe("editing a project in the project list", function(){
     beforeEach(function(){
-      app.createProject({
+      new ProjectModel({
         name: "project-a",
         projectDir: "/project-a/",
         sassDir: "/project-a/sass",
         cssDir: "/project-a/css",
         javascriptsDir: "/project-a/js",
         imagesDir: "/project-a/images"
-      });
-      app.listProjects();
+      }).save();
+      $(".projects").trigger(":changed");
       this.project = $(".project:contains('project-a')");
     });
     
@@ -150,23 +150,23 @@ describe("Compass App", function(){
 
   describe("switching between projects", function(){
     beforeEach(function(){
-      app.createProject({
+      new ProjectModel({
         name: "project-a",
         projectDir: "/project-a/",
         sassDir: "/project-a/sass",
         cssDir: "/project-a/css",
         javascriptsDir: "/project-a/js",
         imagesDir: "/project-a/images"
-      });
-      app.createProject({
+      }).save();
+      new ProjectModel({
         name: "project-b",
         projectDir: "/project-b/",
         sassDir: "/project-b/sass",
         cssDir: "/project-b/css",
         javascriptsDir: "/project-b/js",
         imagesDir: "/project-b/images"
-      });
-      app.listProjects();
+      }).save();
+      $(".projects").trigger(":changed");
     });
 
     context("when viewing project a and the log is selected", function() {
@@ -205,15 +205,15 @@ describe("Compass App", function(){
         css_dir = project_dir.resolvePath("css");
         javascripts_dir = project_dir.resolvePath("js");
         images_dir = project_dir.resolvePath("images");
-      app.createProject({
+      new ProjectModel({
         name: "project-a",
         projectDir: project_dir.nativePath,
         sassDir: sass_dir.nativePath,
         cssDir: css_dir.nativePath,
         javascriptsDir: javascripts_dir.nativePath,
         imagesDir: images_dir.nativePath
-      });
-      app.listProjects();
+      }).save();
+      $(".projects").trigger(":changed");
       this.project = $(".project:contains('project-a')");
     });
     
