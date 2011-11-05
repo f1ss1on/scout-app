@@ -9,77 +9,10 @@ var app = {
     };
   },
 
-  createProjectBySelectingDirectory: function() {
-    browseDirectories(air.File.userDirectory.nativePath, function(evnt) {
-      if(air.Capabilities.os.match(/Windows/)) {
-        app.createProject({
-          name: evnt.target.nativePath.replace(/\\$/, '').split('\\').last(),
-          projectDir: evnt.target.nativePath
-        });
-      } else {
-        app.createProject({
-          name: evnt.target.nativePath.replace(/\/$/, '').split('/').last(),
-          projectDir: evnt.target.nativePath
-        });
-      }
-    });
-  },
-
   createProjectByDroppingADirectory: function(evnt){
     evnt.preventDefault();
     directoryPath = evnt.dataTransfer.getData("text/uri-list");
-    app.createProject({
-      name: directoryPath.replace(/\/$/, '').split('/').last(),
-      projectDir: directoryPath
-    });
-  },
-
-  createProject: function(options) {
-    var defaults = {
-      name:"",
-      projectDir:"",
-      sassDir:"",
-      cssDir:"",
-      javascriptsDir:"",
-      imagesDir:"",
-      environment:"development",
-      outputStyle: "expanded"
-    };
-
-    options = $.extend(defaults, options);
-
-    Projects.save({
-      name: options.name,
-      projectDir: options.projectDir,
-      sassDir: options.sassDir,
-      cssDir: options.cssDir,
-      javascriptsDir: options.javascriptsDir,
-      imagesDir: options.imagesDir,
-      environment: options.environment,
-      outputStyle: options.outputStyle
-    }, function(project){
-      $('.projects').trigger(':changed');
-      $('.project[data-key='+project.key+']').trigger(':select_and_configure');
-    });
-  },
-
-  listProjects: function() {
-    $('.projects').empty();
-    Projects.all(function(projects) {
-      $.each(projects, function(i, project){
-        if(project) {
-          // add project to project_list
-          $.tmpl($("#project_template"), project).appendTo(".projects");
-          // add project details pane
-          if($('.project_details[data-key='+project.key+']').length == 0){
-            $.tmpl($("#project_details_template"), project).appendTo("#main");
-
-            $('.project_details[data-key='+project.key+']').find("option[data-environment=" + project.environment + "]").attr("selected", "selected");
-            $('.project_details[data-key='+project.key+']').find("option[data-output_style=" + project.outputStyle + "]").attr("selected", "selected");
-          }
-        }
-      });
-    });
+    // stub
   },
 
   nukeAllProjects: function(){
@@ -116,11 +49,7 @@ $(document).ready(function() {
   $.tmpl($('#project_template'));
   $.tmpl($('#project_details_template'));
 
-  // create new project
-  $('.option.add').live('click', app.delegateTo('createProjectBySelectingDirectory'));
-
   $('.content').live('drop', app.createProjectByDroppingADirectory);
-  $('.projects').live(':changed', app.listProjects);
 
   $('.project').live(':started', projectStarted);
   $('.project').live(':stopped', projectStopped);
