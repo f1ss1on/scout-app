@@ -13,7 +13,7 @@
   %script{:src => "../javascripts/vendor/Lawnchair.js", :type => "text/javascript"}
   = yield
   %script{:src => "../javascripts/app/application.js", :type => "text/javascript"}
-  %script{:src => "../javascripts/app/process_interaction.js", :type => "text/javascript"}
+  %script{:src => "../javascripts/app/process.js", :type => "text/javascript"}
   %script#colorize_template{:type => "text/x-jquery-tmpl"}
     %div
       %span{:class => "${color}"} ${string}
@@ -39,19 +39,21 @@
         .option_container
           %h2 Configuration
           .options
-
+            .option_group.project_directory
+              %h3 Project Directory
+              ${projectDir}
             .option_group.stylesheet_directories
               %h3 Stylesheet Directories
               .notice
                 %em*Required field
               .option.input
-                %label{:for => "sass_input"} Input Folder:
+                %label{:for => "sass_input"} Input Folder (Sass):
                 %button.dir_find.select_sass_dir
                   %span Choose
                 %input#sass_input.setting.sass_dir{:value => "${sassDir}"}/
                 %em *
               .option.output
-                %label{:for => "css_input"} Output Folder:
+                %label{:for => "css_input"} Output Folder (CSS):
                 %button.dir_find.select_css_dir
                   %span Choose
                 %input#css_input.setting.css_dir{:value => "${cssDir}"}/

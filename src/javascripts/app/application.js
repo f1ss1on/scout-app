@@ -9,125 +9,10 @@ var app = {
     };
   },
 
-  initialize: function() {
-    app.listProjects();
-    app.resizeApp();
-        
-    var project_list = $(".pane.project_list");
-    project_list.resizable({
-      handles: {e: $('.pane.project_list .footer .splitter') },
-      minWidth: parseInt($(".project").css("min-width")),
-      maxWidth: parseInt($(".project").css("max-width"))
-    });
-
-    project_list.bind("resize", app.resizeApp);
-    $(window).resize(function(){
-      project_list.trigger('resize');
-    });
-  },
-  
-  resizeApp: function(e, ui){
-    var project_list = $(".pane.project_list"),
-      list_height = $(window).height() - project_list.position().top;
-      list_min_width = parseInt(project_list.css("min-width")),
-      list_max_width = parseInt(project_list.css("max-width")),
-      list_width = project_list.outerWidth(),
-      wnd_width = $(window).width();
-      
-    if(list_width > list_max_width){
-      list_width = list_max_width;
-    } else if(list_width < list_min_width){
-      list_width = list_min_width;
-    }
-
-    project_list.height(list_height);
-    project_list.width(list_width);
-  
-    $("#main").css({
-      width: wnd_width - list_width,
-      left: list_width 
-    });
-  
-    var project_item_width = $(".project .item").width(),
-      project_commands_width = $(".project .commands").outerWidth(),
-      project_source_width = project_item_width - project_commands_width;
-
-    if(project_source_width < 0) project_source_width = 0;
-    $(".project .source").width(project_source_width);
-    return false;
-  },
-
-  createProjectBySelectingDirectory: function() {
-    browseDirectories(air.File.userDirectory.nativePath, function(evnt) {
-      if(air.Capabilities.os.match(/Windows/)) {
-        app.createProject({
-          name: evnt.target.nativePath.replace(/\\$/, '').split('\\').last(),
-          projectDir: evnt.target.nativePath
-        });
-      } else {
-        app.createProject({
-          name: evnt.target.nativePath.replace(/\/$/, '').split('/').last(),
-          projectDir: evnt.target.nativePath
-        });
-      }
-    });
-  },
-
   createProjectByDroppingADirectory: function(evnt){
     evnt.preventDefault();
     directoryPath = evnt.dataTransfer.getData("text/uri-list");
-    app.createProject({
-      name: directoryPath.replace(/\/$/, '').split('/').last(),
-      projectDir: directoryPath
-    });
-  },
-
-  createProject: function(options) {
-    var defaults = {
-      name:"",
-      projectDir:"",
-      sassDir:"",
-      cssDir:"",
-      javascriptsDir:"",
-      imagesDir:"",
-      environment:"development",
-      outputStyle: "expanded"
-    };
-
-    options = $.extend(defaults, options);
-
-    Projects.save({
-      name: options.name,
-      projectDir: options.projectDir,
-      sassDir: options.sassDir,
-      cssDir: options.cssDir,
-      javascriptsDir: options.javascriptsDir,
-      imagesDir: options.imagesDir,
-      environment: options.environment,
-      outputStyle: options.outputStyle
-    }, function(project){
-      $('.projects').trigger(':changed');
-      $('.project[data-key='+project.key+']').trigger(':select_and_configure');
-    });
-  },
-
-  listProjects: function() {
-    $('.projects').empty();
-    Projects.all(function(projects) {
-      $.each(projects, function(i, project){
-        if(project) {
-          // add project to project_list
-          $.tmpl($("#project_template"), project).appendTo(".projects");
-          // add project details pane
-          if($('.project_details[data-key='+project.key+']').length == 0){
-            $.tmpl($("#project_details_template"), project).appendTo("#main");
-
-            $('.project_details[data-key='+project.key+']').find("option[data-environment=" + project.environment + "]").attr("selected", "selected");
-            $('.project_details[data-key='+project.key+']').find("option[data-output_style=" + project.outputStyle + "]").attr("selected", "selected");
-          }
-        }
-      });
-    });
+    // stub
   },
 
   nukeAllProjects: function(){
@@ -141,7 +26,7 @@ var app = {
     });
     Projects.nuke();
     $('.projects').trigger(':changed');
-    $('.projects').trigger('processes:killAll');
+    $('.projects').trigger('processes:stopAll');
     $('.project_details').hide();
     $('.non_selected').show();
   },
@@ -164,11 +49,7 @@ $(document).ready(function() {
   $.tmpl($('#project_template'));
   $.tmpl($('#project_details_template'));
 
-  // create new project
-  $('.option.add').live('click', app.delegateTo('createProjectBySelectingDirectory'));
-
   $('.content').live('drop', app.createProjectByDroppingADirectory);
-  $('.projects').live(':changed', app.listProjects);
 
   $('.project').live(':started', projectStarted);
   $('.project').live(':stopped', projectStopped);
@@ -332,19 +213,20 @@ $(document).ready(function() {
     setProjectState(this, "started");
   }
 
-  app.initialize();
+  new ScoutApp().initialize();
 });
 
 
 function deleteProject() {
-  key = $(this).parents('.project_details:first').attr('data-key');
+  var project_details = $(this).parents('.project_details:first');
+  key = project_details.attr('data-key');
   Projects.get(key, function(project) {
     Projects.remove(project);
   });
   $('.project[data-key='+key+']:first').trigger('watch:stop');
   $('.projects').trigger(':changed');
 
-  $('.project_details').hide();
+  project_details.remove();
   $('.non_selected').show();
 
   return false;

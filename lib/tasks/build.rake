@@ -1,5 +1,5 @@
 desc "Build Scout"
-task :build => ["environment", "air:runtime:check", "air:sdk:check", "build:jruby", "build:bundle", "build:bin", "build:staticmatic", "build:config"]
+task :build => ["environment", "air:runtime:check", "air:sdk:check", "build:jruby", "build:bundle", "build:bin", "build:staticmatic", "build:config", "compile:coffee"]
 
 namespace :build do
   %w(development test production).each do |env|
@@ -53,4 +53,15 @@ namespace :build do
   
   desc "Runs dev:clean, then dev:setup"
   task :redo => ["build:clean", "build"]
+end
+
+namespace :compile do
+  task :coffee => 'environment' do
+    src = File.join Scout.root, "src/javascripts/src/"
+    src_files = Dir["#{src}/**/**.coffee"].join " "
+    puts src_files.inspect
+    dest = File.join Scout.root, "build/javascripts/app/process.js"
+    system "coffee -b -j #{dest} -c #{src_files}"
+    fail unless $?.exitstatus == 0
+  end
 end
