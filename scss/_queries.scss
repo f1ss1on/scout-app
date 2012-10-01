@@ -119,6 +119,41 @@
 
 }
 
+/* Style adjustments for viewports 1280px and over go here */
+@media only screen and (min-width: 1280px) {
+
+	.container {
+		margin: 0 auto;
+		padding: 20px 40px;
+		max-width: 1080px;
+
+		.webelo {
+			height: 315px;
+			width: 180px;
+		}	
+
+		.screenshot {
+			width: 400px;
+		}
+
+		hgroup {
+			h1 {
+				width: 250px;		
+			}	
+		}
+	
+	}
+
+	.intro {
+		h3 { 
+			font-size: 3.1em; 
+			margin-right: 80px;
+		}
+		p { font-size: 1.8em; }
+
+	}
+
+}
 
 /* ==|== print styles =======================================================
    Print styles.
